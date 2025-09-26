@@ -1,10 +1,11 @@
 package core.basesyntax;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
-
 public class ArrayList<T> implements List<T> {
     private static final int DEFAULT_CAPACITY = 10;
+    // Growth factor 1.5x expressed as 3/2 to avoid magic numbers
+    private static final int GROWTH_NUMERATOR = 3;
+    private static final int GROWTH_DENOMINATOR = 2;
     private Object[] elements;
     private int size;
 
@@ -48,9 +49,12 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public void set(T value, int index) {
+    @SuppressWarnings("unchecked")
+    public T set(T value, int index) {
         checkElementIndex(index);
+        T old = (T) elements[index];
         elements[index] = value;
+        return old;
     }
 
     @Override
@@ -90,7 +94,7 @@ public class ArrayList<T> implements List<T> {
             return;
         }
         int oldCapacity = elements.length;
-        int newCapacity = oldCapacity + (oldCapacity >> 1); // 1.5x
+        int newCapacity = (oldCapacity * GROWTH_NUMERATOR) / GROWTH_DENOMINATOR; // 1.5x
         if (newCapacity < minCapacity) {
             newCapacity = minCapacity;
         }
@@ -120,7 +124,7 @@ public class ArrayList<T> implements List<T> {
             }
         } else {
             for (int i = 0; i < size; i++) {
-                if (Objects.equals(element, elements[i])) {
+                if (element.equals(elements[i])) {
                     return i;
                 }
             }
