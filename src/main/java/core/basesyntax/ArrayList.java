@@ -1,26 +1,21 @@
 package core.basesyntax;
 
 import java.util.NoSuchElementException;
-
 public class ArrayList<T> implements List<T> {
     private static final int DEFAULT_CAPACITY = 10;
-    // Growth factor 1.5x expressed as 3/2 to avoid magic numbers
     private static final int GROWTH_NUMERATOR = 3;
     private static final int GROWTH_DENOMINATOR = 2;
     private Object[] elements;
     private int size;
-
     public ArrayList() {
         this.elements = new Object[DEFAULT_CAPACITY];
         this.size = 0;
     }
-
     @Override
     public void add(T value) {
         ensureCapacity(size + 1);
         elements[size++] = value;
     }
-
     @Override
     public void add(T value, int index) {
         checkPositionIndex(index); // allow index == size
@@ -31,7 +26,6 @@ public class ArrayList<T> implements List<T> {
         elements[index] = value;
         size++;
     }
-
     @Override
     public void addAll(List<T> list) {
         int otherSize = list.size();
@@ -41,14 +35,12 @@ public class ArrayList<T> implements List<T> {
         }
         size += otherSize;
     }
-
     @Override
     @SuppressWarnings("unchecked")
     public T get(int index) {
         checkElementIndex(index);
         return (T) elements[index];
     }
-
     @Override
     @SuppressWarnings("unchecked")
     public T set(T value, int index) {
@@ -57,7 +49,6 @@ public class ArrayList<T> implements List<T> {
         elements[index] = value;
         return old;
     }
-
     @Override
     @SuppressWarnings("unchecked")
     public T remove(int index) {
@@ -70,7 +61,6 @@ public class ArrayList<T> implements List<T> {
         elements[--size] = null; // clear to let GC do its work
         return oldValue;
     }
-
     @Override
     public T remove(T element) {
         int idx = indexOf(element);
@@ -79,17 +69,14 @@ public class ArrayList<T> implements List<T> {
         }
         return remove(idx);
     }
-
     @Override
     public int size() {
         return size;
     }
-
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
-
     private void ensureCapacity(int minCapacity) {
         if (minCapacity <= elements.length) {
             return;
@@ -103,19 +90,16 @@ public class ArrayList<T> implements List<T> {
         System.arraycopy(elements, 0, newArr, 0, size);
         elements = newArr;
     }
-
     private void checkElementIndex(int index) {
         if (index < 0 || index >= size) {
             throw new ArrayListIndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
     }
-
     private void checkPositionIndex(int index) {
         if (index < 0 || index > size) {
             throw new ArrayListIndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
     }
-
     private int indexOf(T element) {
         if (element == null) {
             for (int i = 0; i < size; i++) {
